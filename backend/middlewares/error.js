@@ -30,3 +30,5 @@ export const error = (err, req, res, next) => {
         message: err.message,
     })
 }
+
+export default ErrorHandler;
