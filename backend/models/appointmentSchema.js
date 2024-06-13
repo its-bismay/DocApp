@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 
-
-const messageSchema = new mongoose.Schema({
+const appointmentSchema = new mongoose.Schema({
     firstName:{
         type: String,
         required: true,
@@ -24,11 +23,41 @@ const messageSchema = new mongoose.Schema({
         minLength: [10, "Phone number must contain exact 11 digits!"],
         maxLength: [10, "Phone number must contain exact 11 digits!"]
     },
-    message: {
+    dob:{
+        type:Date,
+        required:[true, "DOB is required!"]
+    },
+    gender:{
+        type:String,
+        required: true,
+        enum: ["Male", "Female", "Others"]
+    },
+    appdate:{
+        type:String,
+        required:true,
+    },
+    cause:{
+        type:String,
+        required:true,
+    },
+    hasVisited:{
+        type:Boolean,
+        default: false,
+    },
+    patientId:{
+        type: mongoose.Schema.ObjectId,
+        required: true,
+    },
+    address: {
         type: String,
         required: true,
-        minLength: [10, "Message must contain atleast 10 characters"]
     },
+    status:{
+        type:String,
+        enum:["Pending", "Accepted", "Rejected"],
+        default: "Pending"
+    }
 })
 
-export const Message = mongoose.model("Message", messageSchema)
+
+export const Appointment = mongoose.model("Appointment", appointmentSchema)

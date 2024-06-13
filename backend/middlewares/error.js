@@ -25,9 +25,11 @@ export const error = (err, req, res, next) => {
         const message = `Invalid ${err.path}`;
         err = new ErrorHandler(message, 400)
     }
+
+    const errorMessage = err.errors ? Object.values(err.errors).map((error) => error.message).join(" ") : err.message
     return res.status(err.statusCode).json({
         success: false,
-        message: err.message,
+        message: errorMessage,
     })
 }
 
