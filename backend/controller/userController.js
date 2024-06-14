@@ -134,16 +134,17 @@ export const addNewDoctor = catchAsyncError(async(req,res,next) => {
     if(!req.files || Object.keys(req.files).length === 0) {
         return next(new ErrorHandler("Image is required", 400))
     }
+    console.log(req)
 
-    const avatar = req.files;
-    const allowedFormats =["image/png", "image/jpeg", "image/webp"];
-    if(!allowedFormats.includes(avatar.mimetype)){
-        return next(new ErrorHandler("Image format not supported", 400))
-    }
+    const avatar = req.files.avatar;
+    // const allowedFormats =["image/png", "image/jpg", "image/jpeg", "image/webp"];
+    // if(!allowedFormats.includes(avatar.mimetype)){
+    //     return next(new ErrorHandler("Image format not supported", 400))
+    // }
 
-    const {firstName, lastName, email, phone, password, gender, dob, reason} = req.bbody
+    const {firstName, lastName, email, phone, gender, dob, reason} = req.body
 
-    if(!firstName || !lastName || !email || !phone || !password || !gender || !dob || !reason){
+    if(!firstName || !lastName || !email || !phone || !gender || !dob || !reason){
         return next(new ErrorHandler("fill all the details", 400))
     }
 
@@ -159,7 +160,7 @@ export const addNewDoctor = catchAsyncError(async(req,res,next) => {
     }
 
     const doctor = await User.create({
-        firstName, lastName, email, phone, password, gender, dob, reason, role: "client", avatar:{
+        firstName, lastName, email, password:"12345678", phone, gender, dob, reason, role: "client", avatar:{
             public_id: cloudinaryResponse.public_id,
             url:cloudinaryResponse.secure_url
         }

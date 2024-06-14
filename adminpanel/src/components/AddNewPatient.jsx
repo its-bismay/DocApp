@@ -1,9 +1,139 @@
-import React from 'react'
+import React, { useContext, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Context } from "../main";
+import axios from "axios";
 
 const AddNewPatient = () => {
-  return (
-    <div>AddNewPatient</div>
-  )
-}
+  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
-export default AddNewPatient
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [dob, setDob] = useState("");
+  const [gender, setGender] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [reason, setReason] = useState("")
+  const [docAvatarPreview, setDocAvatarPreview] = useState("");
+
+  const navigateTo = useNavigate();
+
+  const handleAvatar = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setDocAvatarPreview(reader.result);
+      setAvatar(file);
+    };
+  };
+
+  const handleAddNewDoctor = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("firstName", firstName);
+      formData.append("lastName", lastName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("dob", dob);
+      formData.append("gender", gender);
+      formData.append("reason", reason);
+      formData.append("avatar", avatar);
+      await axios
+        .post("http://localhost:4000/api/v1/user/client/addnew", formData, {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then((res) => {
+          toast.success(res.data.message);
+          setIsAuthenticated(true);
+          navigateTo("/");
+          setFirstName("");
+          setLastName("");
+          setEmail("");
+          setPhone("");
+          setDob("");
+          setGender("");
+          setReason("");
+        });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
+
+  if (!isAuthenticated) {
+    return <Navigate to={"/login"} />;
+  }
+  return (
+    <section className="page">
+      <section className="container add-doctor-form">
+        <img src="/logo.png" alt="logo" className="logo"/>
+        <h1 className="form-title">REGISTER A NEW PATIENT</h1>
+        <form onSubmit={handleAddNewDoctor}>
+          <div className="first-wrapper">
+            <div>
+              <img
+                src={
+                  docAvatarPreview ? `${docAvatarPreview}` : "/placeholder.png"
+                }
+                alt="Doctor Avatar"
+              />
+              <input type="file" onChange={handleAvatar} />
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="Mobile Number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Reason of addmition and other details."
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+              />
+              <input
+                type={"date"}
+                placeholder="Date of Birth"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+              />
+              <select
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+              <button type="submit">Register New Patient</button>
+            </div>
+          </div>
+        </form>
+      </section>
+    </section>
+  );
+};
+
+export default AddNewPatient;
