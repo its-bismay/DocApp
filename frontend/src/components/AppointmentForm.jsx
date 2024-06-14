@@ -12,13 +12,11 @@ const AppointmentForm = () => {
   const [appointmentDate, setAppointmentDate] = useState("");
   const [address, setAddress] = useState("");
   const [cause, setCause] = useState("");
-  const [hasVisited, setHasVisited] = useState(false);
 
 
   const handleAppointment = async (e) => {
     e.preventDefault();
     try {
-      const hasVisitedBool = Boolean(hasVisited);
       const { data } = await axios.post(
         "http://localhost:4000/api/appointment/post",
         {
@@ -29,9 +27,9 @@ const AppointmentForm = () => {
           dob,
           gender,
           appdate: appointmentDate,
-          hasVisited: hasVisitedBool,
           address,
           cause,
+          status: "Pending"
         },
         {
           withCredentials: true,
@@ -46,7 +44,6 @@ const AppointmentForm = () => {
         setDob(""),
         setGender(""),
         setAppointmentDate(""),
-        setHasVisited(""),
         setAddress(""),
         setCause("");
     } catch (error) {
@@ -127,13 +124,6 @@ const AppointmentForm = () => {
               flexDirection: "row",
             }}
           >
-            <p style={{ marginBottom: 0 }}>Have you visited before?</p>
-            <input
-              type="checkbox"
-              checked={hasVisited}
-              onChange={(e) => setHasVisited(e.target.checked)}
-              style={{ flex: "none", width: "25px" }}
-            />
           </div>
           <button style={{ margin: "0 auto" }} onClick={handleAppointment}>GET APPOINTMENT</button>
         </form>

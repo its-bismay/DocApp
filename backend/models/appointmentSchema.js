@@ -40,14 +40,6 @@ const appointmentSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    hasVisited:{
-        type:Boolean,
-        default: false,
-    },
-    patientId:{
-        type: mongoose.Schema.ObjectId,
-        required: true,
-    },
     address: {
         type: String,
         required: true,

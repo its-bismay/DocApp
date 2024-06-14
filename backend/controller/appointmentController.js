@@ -4,7 +4,7 @@ import { Appointment } from "../models/appointmentSchema.js";
 import { User } from "../models/userSchema.js";
 
 export const postAppointment = catchAsyncError(async (req, res, next) => {
-  const {firstName,lastName,email,phone,dob,gender,appdate,cause,hasVisited,address,status,} = req.body;
+  const {firstName,lastName,email,phone,dob,gender,appdate,cause,address,status} = req.body;
 
 
   if(!firstName ||
@@ -15,16 +15,13 @@ export const postAppointment = catchAsyncError(async (req, res, next) => {
     !gender ||
     !appdate ||
     !cause ||
-    !hasVisited ||
-    !patientId ||
     !address ||
     !status){
         return next(new ErrorHandler("please fill all the details", 400))
     }
 
-    const patientId = req.user._id;
     const appointment = await Appointment.create({
-        firstName,lastName,email,phone,dob,gender,appdate,cause,hasVisited,address,status,patientId
+        firstName,lastName,email,phone,dob,gender,appdate,cause,address,status
     })
 
     res.status(200).json({

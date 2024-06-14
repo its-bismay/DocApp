@@ -7,7 +7,7 @@ const Appointment = () => {
     <>
       <Hero
         title={"Schedule Your Appointment"}
-        imageUrl={"/hero.png"}
+        imageUrl={"/signin.png"}
       />
       <AppointmentForm/>
     </>
