@@ -3,20 +3,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Context } from "../main";
+import { MyContext } from "../main";
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const { auth, setAuth } = useContext(MyContext);
 
   const handleLogout = async () => {
     await axios
       .get("http://localhost:4000/api/v1/user/patient/logout", {
         withCredentials: true,
+        headers: { "Content-Type": "application/json" },
       })
       .then((res) => {
         toast.success(res.data.message);
-        setIsAuthenticated(false);
+        setAuth(false);
       })
       .catch((err) => {
         toast.error(err.response.data.message);
@@ -47,7 +48,7 @@ const Navbar = () => {
               About Us
             </Link>
           </div>
-          {isAuthenticated ? (
+          {auth ? (
             <button className="logoutBtn btn" onClick={handleLogout}>
               LOGOUT
             </button>

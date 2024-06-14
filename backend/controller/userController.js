@@ -18,7 +18,7 @@ export const patientRegister = catchAsyncError(async(req, res, next) => {
         !dob ||
         !role
     ){
-        return next(new ErrorHandler("Please fill al the fields", 400))
+        return next(new ErrorHandler("Please fill all the fields", 400))
     }
     let user = await User.findOne({email});
 

@@ -2,20 +2,28 @@ import React, { createContext, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 
-export const Context = createContext({ isAuthenticated: false });
+export const MyContext = createContext({});
+
 const AppWrapper = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [auth, setAuth] = useState(false);
   const [user, setUser] = useState({});
 
   return (
-    <Context.Provider value={{isAuthenticated, setIsAuthenticated, user, setUser}}>
+    <MyContext.Provider
+      value={{
+        auth,
+        setAuth,
+        user,
+        setUser,
+      }}
+    >
       <App />
-    </Context.Provider>
+    </MyContext.Provider>
   );
 };
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AppWrapper/>
+    <AppWrapper />
   </React.StrictMode>
 );
