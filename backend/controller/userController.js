@@ -87,7 +87,8 @@ export const addNewAdmin = catchAsyncError(async(req,res,next) => {
 
     res.staus(200).json({
         success: true,
-        message: "new admin created"
+        message: "new admin created",
+        admin
     })
 })
 
